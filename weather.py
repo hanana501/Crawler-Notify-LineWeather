@@ -5,8 +5,8 @@ Created on Sat Jan  7 15:22:40 2023
 @author: WEIJUN
 """
 
-import time
-from datetime import datetime
+# import time
+# from datetime import datetime
 import requests
 import json
 import pandas as pd
@@ -16,10 +16,10 @@ import MySQLdb
 # 爬中央氣象局天氣資訊
 # ==============================
 
-# 取得今天日期 
-ts = time.time()
-dt = datetime.fromtimestamp(ts).strftime("%m%d")
-# print(dt)
+# # 取得今天日期 
+# ts = time.time()
+# dt = datetime.fromtimestamp(ts).strftime("%m%d")
+# # print(dt)
 
 # 發送請求，並解析氣象局API
 url = 'https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001'
@@ -70,8 +70,9 @@ if web.status_code == 200 :
         tmr["晚上舒適度"].append(n_ci)
         tmr["晚上最高溫度"].append(n_maxT)
 
+# 轉成DataFrame，並以不覆蓋方式寫入csv檔
 df = pd.DataFrame(tmr)
-df.to_csv(dt+"weather.csv",encoding="utf-8",index=False)
+df.to_csv('all_weather.csv',mode='a',encoding="utf-8",index=False,header=None)
 
 # ==============================
 # 設定notify
@@ -87,9 +88,9 @@ def notify(message, token):
                   params = payload) # 提出post請求
     
 # 發送訊息
-token = "QhvfrfVnF4YWSgSX35Fs1UDbzaf7gQOqlzTTZjIeaxy" # 個人
-#"tRSiYCZpWIOnZkAltHHIeH4lGLk7iMI771XG8DCr2OO" # 景家群組
-message = "\n安安，明天(%s)的白天天氣為%s\n溫度：%s~%s\n降雨機率：%s \n感覺為%s" %(tmr["日期"][1],tmr["白天天氣現象"][1],tmr["白天最低溫度"][1],tmr["白天最高溫度"][1],tmr["白天降雨機率"][1],tmr["白天舒適度"][1])
+token = "tRSiYCZpWIOnZkAltHHIeH4lGLk7iMI771XG8DCr2OO" # 景家群組
+#"QhvfrfVnF4YWSgSX35Fs1UDbzaf7gQOqlzTTZjIeaxy" # 個人
+message = "\n安安，明天(%s)新北市的天氣為%s\n溫度：%s~%s\n降雨機率：%s%%\n感覺為%s" %(tmr["日期"][1],tmr["白天天氣現象"][1],tmr["白天最低溫度"][1],tmr["白天最高溫度"][1],tmr["白天降雨機率"][1],tmr["白天舒適度"][1])
 notify(message, token)
 
 # ==============================
