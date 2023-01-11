@@ -10,7 +10,7 @@ Created on Sat Jan  7 15:22:40 2023
 import requests
 import json
 import pandas as pd
-import MySQLdb
+# import MySQLdb
 
 # ==============================
 # 爬中央氣象局天氣資訊
@@ -93,38 +93,38 @@ token = "tRSiYCZpWIOnZkAltHHIeH4lGLk7iMI771XG8DCr2OO" # 景家群組
 message = "\n安安，明天(%s)新北市的天氣為%s\n溫度：%s~%s\n降雨機率：%s%%\n感覺為%s" %(tmr["日期"][1],tmr["白天天氣現象"][1],tmr["白天最低溫度"][1],tmr["白天最高溫度"][1],tmr["白天降雨機率"][1],tmr["白天舒適度"][1])
 notify(message, token)
 
-# ==============================
-# 寫入資料庫
-# ==============================
-try:
-    # 開啟資料庫連接
-    conn = MySQLdb.connect(host = "localhost", #主機名稱
-                           user = "root", #帳號
-                           password = "123456", #密碼
-                           database = "weather", #資料庫
-                           port=3308) #port
+# # ==============================
+# # 寫入資料庫
+# # ==============================
+# try:
+#     # 開啟資料庫連接
+#     conn = MySQLdb.connect(host = "localhost", #主機名稱
+#                            user = "root", #帳號
+#                            password = "123456", #密碼
+#                            database = "weather", #資料庫
+#                            port=3308) #port
     
-    #使用cursor()方法操作資料庫
-    cursor = conn.cursor()
+#     #使用cursor()方法操作資料庫
+#     cursor = conn.cursor()
     
-    # 插入資料表資料
-    try:
-        for i in range(len(df)):
-            sql = """insert into weather_2023 (city,date,d_wx,d_pop,d_minT,d_ci,d_maxT,n_wx,n_pop,n_minT,n_ci,n_maxT) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
-            var = (df.iloc[i,0],df.iloc[i,1],df.iloc[i,2],
-                   df.iloc[i,3],df.iloc[i,4],df.iloc[i,5],
-                   df.iloc[i,6],df.iloc[i,7],df.iloc[i,8],
-                   df.iloc[i,9],df.iloc[i,10],df.iloc[i,11])
-            cursor.execute(sql, var)
-        conn.commit() # 重整
-        print("資料寫入完成")  
-    except Exception as e:
-        print("錯誤訊息：",e)
+#     # 插入資料表資料
+#     try:
+#         for i in range(len(df)):
+#             sql = """insert into weather_2023 (city,date,d_wx,d_pop,d_minT,d_ci,d_maxT,n_wx,n_pop,n_minT,n_ci,n_maxT) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
+#             var = (df.iloc[i,0],df.iloc[i,1],df.iloc[i,2],
+#                    df.iloc[i,3],df.iloc[i,4],df.iloc[i,5],
+#                    df.iloc[i,6],df.iloc[i,7],df.iloc[i,8],
+#                    df.iloc[i,9],df.iloc[i,10],df.iloc[i,11])
+#             cursor.execute(sql, var)
+#         conn.commit() # 重整
+#         print("資料寫入完成")  
+#     except Exception as e:
+#         print("錯誤訊息：",e)
     
-except Exception as e:
-    print("資料庫連接失敗",e)
+# except Exception as e:
+#     print("資料庫連接失敗",e)
     
-finally:
-    cursor.close()
-    conn.close()
-    print("資料庫連接結束")
+# finally:
+#     cursor.close()
+#     conn.close()
+#     print("資料庫連接結束")
