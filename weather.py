@@ -82,15 +82,26 @@ def notify(message, token):
     url = "https://notify-api.line.me/api/notify" # Notify網址
     headers = {"Authorization":"Bearer " + token} # https表頭
     payload = {"message":message, # https內容
-               "stickerPackageId" : 8525, # 該組貼圖編號
-               "stickerId" : 16581294} # 指定貼圖編號
+               "stickerPackageId" : 6325, # 該組貼圖編號
+               "stickerId" : 10979909} # 指定貼圖編號
     requests.post(url, headers = headers,
                   params = payload) # 提出post請求
     
 # 發送訊息
 token = "tRSiYCZpWIOnZkAltHHIeH4lGLk7iMI771XG8DCr2OO" # 景家群組
 #"QhvfrfVnF4YWSgSX35Fs1UDbzaf7gQOqlzTTZjIeaxy" # 個人
-message = "\n安安，明天(%s)新北市的天氣為%s\n溫度：%s~%s\n降雨機率：%s%%\n感覺為%s" %(tmr["日期"][1],tmr["白天天氣現象"][1],tmr["白天最低溫度"][1],tmr["白天最高溫度"][1],tmr["白天降雨機率"][1],tmr["白天舒適度"][1])
+message = """
+安安，明天(%s)%s的氣象如下：
+○白天
+天氣狀況為%s
+溫度：%s~%s
+降雨機率：%s%%
+感覺為%s
+★晚上
+天氣狀況為%s
+溫度：%s~%s
+降雨機率：%s%%
+感覺為%s""" %(tmr["日期"][1],tmr["城市"][1],tmr["白天天氣現象"][1],tmr["白天最低溫度"][1],tmr["白天最高溫度"][1],tmr["白天降雨機率"][1],tmr["白天舒適度"][1],tmr["晚上天氣現象"][1],tmr["晚上最低溫度"][1],tmr["晚上最高溫度"][1],tmr["晚上降雨機率"][1],tmr["晚上舒適度"][1])
 notify(message, token)
 
 # # ==============================
